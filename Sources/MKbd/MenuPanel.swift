@@ -8,17 +8,12 @@ struct MenuPanel: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            ScrollView(.vertical) {
-                VStack(alignment: .leading, spacing: 10) {
-                    header
-                    currentAppCard
-                    rulesSection
-                    Divider()
-                    options
-                    statusMessage
-                }
-            }
-            .scrollIndicators(.hidden)
+            header
+            currentAppCard
+            rulesSection
+            Divider()
+            options
+            statusMessage
             Divider()
             footer
         }
@@ -204,17 +199,21 @@ struct MenuPanel: View {
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
             } else {
-                VStack(spacing: 6) {
-                    ForEach(model.ruleItems) { item in
-                        RuleRow(
-                            item: item,
-                            icon: model.icon(forBundleID: item.bundleID),
-                            sources: model.sources,
-                            set: { model.setRule(bundleID: item.bundleID, sourceID: $0) },
-                            remove: { model.removeRule(bundleID: item.bundleID) }
-                        )
+                ScrollView(.vertical) {
+                    VStack(spacing: 6) {
+                        ForEach(model.ruleItems) { item in
+                            RuleRow(
+                                item: item,
+                                icon: model.icon(forBundleID: item.bundleID),
+                                sources: model.sources,
+                                set: { model.setRule(bundleID: item.bundleID, sourceID: $0) },
+                                remove: { model.removeRule(bundleID: item.bundleID) }
+                            )
+                        }
                     }
                 }
+                .frame(height: 86)
+                .scrollIndicators(.automatic)
             }
         }
     }
