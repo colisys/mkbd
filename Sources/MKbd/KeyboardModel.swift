@@ -172,25 +172,25 @@ final class KeyboardModel: ObservableObject {
         workspaceObservers.append(center.addObserver(
             forName: NSWorkspace.didActivateApplicationNotification,
             object: nil, queue: .main
-        ) { [weak self] notification in
+        ) { notification in
             guard let app = notification.userInfo?[NSWorkspace.applicationUserInfoKey]
                 as? NSRunningApplication else { return }
-            Task { @MainActor in self?.applicationActivated(app) }
+            Task { @MainActor [weak self] in self?.applicationActivated(app) }
         })
         workspaceObservers.append(center.addObserver(
             forName: NSWorkspace.didWakeNotification,
             object: nil, queue: .main
-        ) { [weak self] _ in
-            Task { @MainActor in self?.applyToFrontmost(recordPrevious: false) }
+        ) { _ in
+            Task { @MainActor [weak self] in self?.applyToFrontmost(recordPrevious: false) }
         })
         sourceObserver = DistributedNotificationCenter.default().addObserver(
             forName: Self.sourceNotification, object: nil, queue: .main
-        ) { [weak self] _ in
-            Task { @MainActor in self?.currentSourceID = InputSources.currentID() }
+        ) { _ in
+            Task { @MainActor [weak self] in self?.currentSourceID = InputSources.currentID() }
         }
 
-        let timer = Timer(timeInterval: 1, repeats: true) { [weak self] _ in
-            Task { @MainActor in self?.pollConfigFile() }
+        let timer = Timer(timeInterval: 1, repeats: true) { _ in
+            Task { @MainActor [weak self] in self?.pollConfigFile() }
         }
         RunLoop.main.add(timer, forMode: .common)
         configTimer = timer
