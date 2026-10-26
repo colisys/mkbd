@@ -8,12 +8,16 @@ struct MenuPanel: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            header
-            currentAppCard
-            options
-            Divider()
-            rulesSection
-            statusMessage
+            ScrollView(.vertical) {
+                VStack(alignment: .leading, spacing: 10) {
+                    header
+                    currentAppCard
+                    options
+                    Divider()
+                    rulesSection
+                    statusMessage
+                }
+            }
             Divider()
             footer
         }
@@ -199,20 +203,17 @@ struct MenuPanel: View {
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
             } else {
-                ScrollView(.vertical) {
-                    VStack(spacing: 6) {
-                        ForEach(model.ruleItems) { item in
-                            RuleRow(
-                                item: item,
-                                icon: model.icon(forBundleID: item.bundleID),
-                                sources: model.sources,
-                                set: { model.setRule(bundleID: item.bundleID, sourceID: $0) },
-                                remove: { model.removeRule(bundleID: item.bundleID) }
-                            )
-                        }
+                VStack(spacing: 6) {
+                    ForEach(model.ruleItems) { item in
+                        RuleRow(
+                            item: item,
+                            icon: model.icon(forBundleID: item.bundleID),
+                            sources: model.sources,
+                            set: { model.setRule(bundleID: item.bundleID, sourceID: $0) },
+                            remove: { model.removeRule(bundleID: item.bundleID) }
+                        )
                     }
                 }
-                .frame(maxHeight: 190)
             }
         }
     }
