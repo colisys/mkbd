@@ -12,12 +12,13 @@ struct MenuPanel: View {
                 VStack(alignment: .leading, spacing: 10) {
                     header
                     currentAppCard
-                    options
-                    Divider()
                     rulesSection
+                    Divider()
+                    options
                     statusMessage
                 }
             }
+            .scrollIndicators(.hidden)
             Divider()
             footer
         }
